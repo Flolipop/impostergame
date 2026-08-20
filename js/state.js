@@ -1,12 +1,13 @@
 export const Phase = Object.freeze({
   SETUP: "setup",
   REVEAL: "reveal",
+  DISCUSS: "discuss",
   RESULTS: "results",
 });
 
 export const state = {
   phase: Phase.SETUP,
-  playerCount: 5,
+  playerNames: [],
   selectedCategories: ["anime", "movies", "videoGames", "general"],
   round: null,
   revealIndex: 0,

@@ -31,8 +31,9 @@ export function onEnter() {
 
 function updateLabels() {
   const seat = state.revealIndex + 1;
-  progressEl.textContent = `Player ${seat} of ${state.playerCount}`;
-  passLabelEl.textContent = `Pass the phone to Player ${seat}`;
+  const name = state.playerNames[state.revealIndex];
+  progressEl.textContent = `${seat} of ${state.playerNames.length}`;
+  passLabelEl.textContent = `Pass the phone to ${name}`;
 }
 
 function revealCurrentPlayer() {
@@ -59,8 +60,8 @@ function advanceToNextPlayer() {
   cardEl.classList.remove("is-revealed");
   hideBtn.hidden = true;
 
-  if (state.revealIndex + 1 >= state.playerCount) {
-    setPhase(Phase.RESULTS);
+  if (state.revealIndex + 1 >= state.playerNames.length) {
+    setPhase(Phase.DISCUSS);
     return;
   }
 

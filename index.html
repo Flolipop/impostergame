@@ -19,12 +19,12 @@
       </header>
 
       <div class="panel">
-        <h2 class="panel-title">Players</h2>
-        <div class="stepper">
-          <button type="button" id="player-decrement" class="stepper-btn" aria-label="Fewer players">−</button>
-          <span id="player-count" class="stepper-value">5</span>
-          <button type="button" id="player-increment" class="stepper-btn" aria-label="More players">+</button>
+        <h2 class="panel-title">Players <span id="player-count-label" class="panel-title-count"></span></h2>
+        <div class="name-input-row">
+          <input type="text" id="player-name-input" class="name-input" placeholder="Enter a name" maxlength="20" autocomplete="off" />
+          <button type="button" id="player-add" class="btn btn-secondary name-add-btn">Add</button>
         </div>
+        <ul id="player-list" class="player-list"></ul>
       </div>
 
       <div class="panel">
@@ -56,6 +56,16 @@
         </button>
 
         <button type="button" id="reveal-hide" class="btn btn-primary btn-big" hidden>Got it — Hide &amp; Pass</button>
+      </div>
+    </section>
+
+    <!-- DISCUSS -->
+    <section id="screen-discuss" class="screen">
+      <div class="discuss-wrap">
+        <p class="discuss-label">Everyone's seen their role.</p>
+        <p class="discuss-starter" id="discuss-starter">Alex starts the discussion!</p>
+        <p class="discuss-hint">Talk it out, then reveal the imposter when you're ready.</p>
+        <button type="button" id="discuss-reveal" class="btn btn-primary btn-big">Reveal Imposter</button>
       </div>
     </section>
 

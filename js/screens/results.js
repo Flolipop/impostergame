@@ -13,7 +13,7 @@ export function init() {
   newSetupBtn = $("#new-setup");
 
   playAgainBtn.addEventListener("click", () => {
-    state.round = createRound(state.playerCount, state.selectedCategories);
+    state.round = createRound(state.playerNames, state.selectedCategories);
     state.revealIndex = 0;
     setPhase(Phase.REVEAL);
   });
@@ -25,7 +25,7 @@ export function init() {
 
 export function onEnter() {
   const { round } = state;
-  imposterEl.textContent = `Player ${round.imposterIndex + 1}`;
+  imposterEl.textContent = state.playerNames[round.imposterIndex];
   categoryEl.textContent = getCategoryLabel(round.category);
   wordEl.textContent = round.word;
   hintEl.textContent = round.hint;

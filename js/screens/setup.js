@@ -5,16 +5,24 @@ import { $, $all } from "../utils.js";
 const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 10;
 
-let playerCountEl, categoryListEl, errorEl, startBtn;
+let nameInputEl, addBtn, playerListEl, playerCountLabelEl, categoryListEl, errorEl, startBtn;
 
 export function init() {
-  playerCountEl = $("#player-count");
+  nameInputEl = $("#player-name-input");
+  addBtn = $("#player-add");
+  playerListEl = $("#player-list");
+  playerCountLabelEl = $("#player-count-label");
   categoryListEl = $("#category-list");
   errorEl = $("#setup-error");
   startBtn = $("#start-game");
 
-  $("#player-decrement").addEventListener("click", () => changePlayerCount(-1));
-  $("#player-increment").addEventListener("click", () => changePlayerCount(1));
+  addBtn.addEventListener("click", addNameFromInput);
+  nameInputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addNameFromInput();
+    }
+  });
 
   renderCategoryList();
 
@@ -27,6 +35,27 @@ export function onEnter() {
   render();
 }
 
+function addNameFromInput() {
+  const name = nameInputEl.value.trim();
+  if (!name) return;
+
+  if (state.playerNames.length >= MAX_PLAYERS) {
+    showError(`You can only have up to ${MAX_PLAYERS} players.`);
+    return;
+  }
+
+  hideError();
+  state.playerNames.push(name);
+  nameInputEl.value = "";
+  render();
+  nameInputEl.focus();
+}
+
+function removePlayerName(index) {
+  state.playerNames.splice(index, 1);
+  render();
+}
+
 function renderCategoryList() {
   categoryListEl.innerHTML = "";
   getAllCategoryIds().forEach((id) => {
@@ -35,12 +64,12 @@ function renderCategoryList() {
     btn.className = "category-toggle";
     btn.dataset.category = id;
     btn.textContent = getCategoryLabel(id);
-    btn.addEventListener("click", () => toggleCategory(id, btn));
+    btn.addEventListener("click", () => toggleCategory(id));
     categoryListEl.appendChild(btn);
   });
 }
 
-function toggleCategory(id, btn) {
+function toggleCategory(id) {
   const idx = state.selectedCategories.indexOf(id);
   if (idx >= 0) {
     state.selectedCategories.splice(idx, 1);
@@ -50,20 +79,17 @@ function toggleCategory(id, btn) {
   render();
 }
 
-function changePlayerCount(delta) {
-  const next = state.playerCount + delta;
-  if (next < MIN_PLAYERS || next > MAX_PLAYERS) return;
-  state.playerCount = next;
-  render();
-}
-
 function startGame() {
+  if (state.playerNames.length < MIN_PLAYERS) {
+    showError(`Add at least ${MIN_PLAYERS} players.`);
+    return;
+  }
   if (state.selectedCategories.length === 0) {
     showError("Pick at least one category.");
     return;
   }
   hideError();
-  state.round = createRound(state.playerCount, state.selectedCategories);
+  state.round = createRound(state.playerNames, state.selectedCategories);
   state.revealIndex = 0;
   setPhase(Phase.REVEAL);
 }
@@ -77,8 +103,43 @@ function hideError() {
   errorEl.hidden = true;
 }
 
+function renderPlayerList() {
+  playerListEl.innerHTML = "";
+
+  if (state.playerNames.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "player-list-empty";
+    empty.textContent = "No players yet — add at least 3.";
+    playerListEl.appendChild(empty);
+    return;
+  }
+
+  state.playerNames.forEach((name, index) => {
+    const row = document.createElement("li");
+    row.className = "player-row";
+
+    const nameEl = document.createElement("span");
+    nameEl.className = "player-row-name";
+    nameEl.textContent = name;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "player-row-remove";
+    removeBtn.textContent = "×";
+    removeBtn.setAttribute("aria-label", `Remove ${name}`);
+    removeBtn.addEventListener("click", () => removePlayerName(index));
+
+    row.appendChild(nameEl);
+    row.appendChild(removeBtn);
+    playerListEl.appendChild(row);
+  });
+}
+
 function render() {
-  playerCountEl.textContent = String(state.playerCount);
+  renderPlayerList();
+  playerCountLabelEl.textContent = `(${state.playerNames.length}/${MAX_PLAYERS})`;
+  addBtn.disabled = state.playerNames.length >= MAX_PLAYERS;
+
   $all(".category-toggle", categoryListEl).forEach((btn) => {
     btn.classList.toggle("active", state.selectedCategories.includes(btn.dataset.category));
   });
