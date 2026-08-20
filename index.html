@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#181229" />
+  <meta name="theme-color" content="#000000" />
   <title>Imposter</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AD%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='black'/%3E%3Ctext x='50' y='68' font-size='60' font-family='Georgia,serif' font-weight='bold' fill='white' text-anchor='middle'%3E?%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body data-active-phase="setup">
@@ -44,14 +44,16 @@
         <p class="reveal-pass-label" id="reveal-pass-label">Pass the phone to Player 1</p>
 
         <button type="button" id="reveal-card" class="reveal-card" aria-label="Tap to reveal your role">
-          <span class="reveal-card-face reveal-card-front">
-            <span class="reveal-card-icon">🎭</span>
-            <span class="reveal-card-hint-text">Tap to reveal</span>
-          </span>
-          <span class="reveal-card-face reveal-card-back" id="reveal-card-back">
-            <span class="reveal-role" id="reveal-role"></span>
-            <span class="reveal-category" id="reveal-category"></span>
-            <span class="reveal-word" id="reveal-word"></span>
+          <span class="reveal-card-inner">
+            <span class="reveal-card-face reveal-card-front">
+              <span class="reveal-card-icon">?</span>
+              <span class="reveal-card-hint-text">Tap to reveal</span>
+            </span>
+            <span class="reveal-card-face reveal-card-back" id="reveal-card-back">
+              <span class="reveal-role" id="reveal-role"></span>
+              <span class="reveal-category" id="reveal-category"></span>
+              <span class="reveal-word" id="reveal-word"></span>
+            </span>
           </span>
         </button>
 
