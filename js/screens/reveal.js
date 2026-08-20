@@ -2,14 +2,13 @@ import { state, setPhase, Phase } from "../state.js";
 import { getCategoryLabel } from "../game-logic.js";
 import { $ } from "../utils.js";
 
-let progressEl, passLabelEl, cardEl, cardBackEl, roleEl, categoryEl, wordEl, hideBtn;
+let progressEl, passLabelEl, cardEl, roleEl, categoryEl, wordEl, hideBtn;
 let revealed = false;
 
 export function init() {
   progressEl = $("#reveal-progress");
   passLabelEl = $("#reveal-pass-label");
   cardEl = $("#reveal-card");
-  cardBackEl = $("#reveal-card-back");
   roleEl = $("#reveal-role");
   categoryEl = $("#reveal-category");
   wordEl = $("#reveal-word");
@@ -25,7 +24,7 @@ export function init() {
 
 export function onEnter() {
   revealed = false;
-  cardBackEl.hidden = true;
+  cardEl.classList.remove("is-revealed");
   hideBtn.hidden = true;
   updateLabels();
 }
@@ -51,17 +50,17 @@ function revealCurrentPlayer() {
   }
 
   revealed = true;
-  cardBackEl.hidden = false;
+  cardEl.classList.add("is-revealed");
   hideBtn.hidden = false;
 }
 
 function advanceToNextPlayer() {
   revealed = false;
-  cardBackEl.hidden = true;
+  cardEl.classList.remove("is-revealed");
   hideBtn.hidden = true;
 
   if (state.revealIndex + 1 >= state.playerCount) {
-    setPhase(Phase.TIMER);
+    setPhase(Phase.RESULTS);
     return;
   }
 

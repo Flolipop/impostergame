@@ -32,16 +32,6 @@
         <div id="category-list" class="category-list"></div>
       </div>
 
-      <div class="panel">
-        <h2 class="panel-title">Discussion Timer</h2>
-        <div class="timer-choices" id="timer-choices">
-          <button type="button" class="chip" data-seconds="60">1 min</button>
-          <button type="button" class="chip" data-seconds="120">2 min</button>
-          <button type="button" class="chip active" data-seconds="180">3 min</button>
-          <button type="button" class="chip" data-seconds="300">5 min</button>
-        </div>
-      </div>
-
       <p id="setup-error" class="error-text" hidden></p>
 
       <button type="button" id="start-game" class="btn btn-primary btn-big">Start Game</button>
@@ -58,7 +48,7 @@
             <span class="reveal-card-icon">🎭</span>
             <span class="reveal-card-hint-text">Tap to reveal</span>
           </span>
-          <span class="reveal-card-face reveal-card-back" id="reveal-card-back" hidden>
+          <span class="reveal-card-face reveal-card-back" id="reveal-card-back">
             <span class="reveal-role" id="reveal-role"></span>
             <span class="reveal-category" id="reveal-category"></span>
             <span class="reveal-word" id="reveal-word"></span>
@@ -66,18 +56,6 @@
         </button>
 
         <button type="button" id="reveal-hide" class="btn btn-primary btn-big" hidden>Got it — Hide &amp; Pass</button>
-      </div>
-    </section>
-
-    <!-- TIMER -->
-    <section id="screen-timer" class="screen">
-      <div class="timer-wrap">
-        <p class="timer-label">Discuss and find the imposter</p>
-        <p class="timer-display" id="timer-display">3:00</p>
-        <div class="timer-controls">
-          <button type="button" id="timer-toggle" class="btn btn-secondary">Pause</button>
-          <button type="button" id="timer-reveal" class="btn btn-primary">Reveal Imposter</button>
-        </div>
       </div>
     </section>
 

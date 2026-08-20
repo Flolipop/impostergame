@@ -18,14 +18,6 @@ export function init() {
 
   renderCategoryList();
 
-  $all(".chip", $("#timer-choices")).forEach((chip) => {
-    chip.addEventListener("click", () => {
-      $all(".chip", $("#timer-choices")).forEach((c) => c.classList.remove("active"));
-      chip.classList.add("active");
-      state.timerSeconds = Number(chip.dataset.seconds);
-    });
-  });
-
   startBtn.addEventListener("click", startGame);
 
   render();

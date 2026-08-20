@@ -1,7 +1,6 @@
 export const Phase = Object.freeze({
   SETUP: "setup",
   REVEAL: "reveal",
-  TIMER: "timer",
   RESULTS: "results",
 });
 
@@ -9,7 +8,6 @@ export const state = {
   phase: Phase.SETUP,
   playerCount: 5,
   selectedCategories: ["anime", "movies", "videoGames", "general"],
-  timerSeconds: 180,
   round: null,
   revealIndex: 0,
 };

@@ -27,16 +27,16 @@ to the word but never give it away directly. No other file needs to change.
 
 ## Deploying to GitHub Pages
 
-1. Push this repo to GitHub.
-2. In the repo, go to **Settings → Pages** and set the source to "Deploy from
-   a branch", picking the branch and the `/` (root) folder.
-3. Your game will be live at `https://<username>.github.io/<repo>/`.
+This repo includes a `.github/workflows/pages.yml` workflow that deploys
+automatically on every push. One-time setup: go to **Settings → Pages** and
+set the source to "GitHub Actions". Your game will then be live at
+`https://<username>.github.io/<repo>/`.
 
 ## How it's built
 
 Plain HTML/CSS/JS with ES modules — no framework, no bundler, no backend.
 
-- `index.html` — the four screens (setup, reveal, timer, results)
+- `index.html` — the three screens (setup, reveal, results)
 - `js/state.js` — game state + phase transitions
 - `js/game-logic.js` — picks the word and the imposter
 - `js/screens/*.js` — one module per screen
