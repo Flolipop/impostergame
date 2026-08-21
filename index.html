@@ -47,6 +47,37 @@
       <p id="setup-error" class="error-text" hidden></p>
 
       <button type="button" id="start-game" class="btn btn-primary btn-big">Start Game</button>
+      <button type="button" id="open-editor" class="btn btn-secondary btn-big">Edit Word Lists</button>
+    </section>
+
+    <!-- EDITOR -->
+    <section id="screen-editor" class="screen">
+      <div class="editor-header">
+        <button type="button" id="editor-back" class="icon-btn" aria-label="Back to setup">←</button>
+        <h1 class="editor-title">Word Lists</h1>
+        <button type="button" id="editor-reset" class="clear-all-btn">Reset</button>
+      </div>
+
+      <div class="difficulty-choices" id="editor-category-tabs">
+        <button type="button" class="chip" data-category="anime">Anime</button>
+        <button type="button" class="chip" data-category="movies">Movies</button>
+        <button type="button" class="chip" data-category="videoGames">Games</button>
+        <button type="button" class="chip" data-category="general">General</button>
+      </div>
+
+      <div class="panel editor-add-panel">
+        <h2 class="panel-title">Add Word</h2>
+        <input type="text" id="editor-word-input" class="name-input editor-word-field" placeholder="Word" maxlength="40" autocomplete="off" />
+        <div class="editor-hint-inputs">
+          <input type="text" id="editor-hint-easy" class="name-input" placeholder="Easy hint" maxlength="20" autocomplete="off" />
+          <input type="text" id="editor-hint-medium" class="name-input" placeholder="Medium hint" maxlength="20" autocomplete="off" />
+          <input type="text" id="editor-hint-hard" class="name-input" placeholder="Hard hint" maxlength="20" autocomplete="off" />
+        </div>
+        <p id="editor-error" class="error-text" hidden></p>
+        <button type="button" id="editor-add-word" class="btn btn-primary">Add Word</button>
+      </div>
+
+      <ul id="editor-word-list" class="editor-word-list"></ul>
     </section>
 
     <!-- REVEAL -->

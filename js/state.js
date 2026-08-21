@@ -1,5 +1,6 @@
 export const Phase = Object.freeze({
   SETUP: "setup",
+  EDITOR: "editor",
   REVEAL: "reveal",
   DISCUSS: "discuss",
   RESULTS: "results",

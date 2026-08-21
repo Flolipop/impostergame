@@ -6,7 +6,7 @@ import { $, $all } from "../utils.js";
 const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 10;
 
-let nameInputEl, addBtn, clearAllBtn, playerListEl, playerCountLabelEl, categoryListEl, difficultyListEl, errorEl, startBtn;
+let nameInputEl, addBtn, clearAllBtn, playerListEl, playerCountLabelEl, categoryListEl, difficultyListEl, errorEl, startBtn, editorBtn;
 
 export function init() {
   const saved = loadSetup();
@@ -25,6 +25,7 @@ export function init() {
   difficultyListEl = $("#difficulty-choices");
   errorEl = $("#setup-error");
   startBtn = $("#start-game");
+  editorBtn = $("#open-editor");
 
   addBtn.addEventListener("click", addNameFromInput);
   nameInputEl.addEventListener("keydown", (e) => {
@@ -47,6 +48,7 @@ export function init() {
   });
 
   startBtn.addEventListener("click", startGame);
+  editorBtn.addEventListener("click", () => setPhase(Phase.EDITOR));
 
   render();
 }

@@ -50,6 +50,7 @@ button {
 }
 
 body[data-active-phase="setup"] #screen-setup,
+body[data-active-phase="editor"] #screen-editor,
 body[data-active-phase="reveal"] #screen-reveal,
 body[data-active-phase="discuss"] #screen-discuss,
 body[data-active-phase="results"] #screen-results {
@@ -478,6 +479,152 @@ body[data-active-phase="results"] #screen-results {
   margin: 0 0 12px;
   color: var(--text-dim);
   font-size: 0.95rem;
+}
+
+/* ---------- Editor ---------- */
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.icon-btn {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-touch-callout: none;
+  transition: background 0.2s var(--ease);
+}
+
+.icon-btn:active {
+  background: var(--surface-2);
+}
+
+.editor-title {
+  flex: 1;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.editor-add-panel {
+  margin-top: 16px;
+}
+
+.editor-word-field {
+  margin-bottom: 10px;
+}
+
+.editor-hint-inputs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.editor-hint-inputs .name-input {
+  min-width: 0;
+}
+
+.editor-word-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editor-word-row {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  animation: fade-in-up 0.3s var(--ease);
+}
+
+.editor-word-row-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.editor-word-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.editor-word-title {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.editor-word-hints {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.editor-word-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.editor-action-btn {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  -webkit-touch-callout: none;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.editor-action-btn:active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.editor-action-danger {
+  color: var(--text);
+}
+
+.editor-word-row-edit {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  gap: 8px;
+}
+
+.editor-word-row-edit .name-input {
+  margin-bottom: 0;
+}
+
+.editor-row-error {
+  margin: 0;
+}
+
+.editor-form-btn {
+  flex: 1;
+  min-height: 44px;
 }
 
 /* ---------- Results ---------- */

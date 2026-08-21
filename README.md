@@ -21,11 +21,16 @@ Then open `http://localhost:8000`.
 
 ## Adding words
 
-All game content lives in [`data/categories.js`](data/categories.js). Add or
-edit `{ word, hints: { easy, medium, hard } }` entries under any category —
-each hint is a single word related to the answer but never the answer
-itself, at three difficulty tiers (easy is more revealing, hard is vaguer).
-No other file needs to change.
+The game ships with a built-in word bank in
+[`data/categories.js`](data/categories.js): `{ word, hints: { easy, medium,
+hard } }` entries per category, each hint a single word related to the
+answer but never the answer itself, at three difficulty tiers.
+
+Players can also add, edit, or delete words right from the app — tap **Edit
+Word Lists** on the setup screen. Those changes are saved to the browser's
+localStorage (per device, not shared between players) and a "Reset" button
+restores a category back to the shipped defaults. To change the defaults
+themselves for everyone, edit `data/categories.js` directly.
 
 ## Deploying to GitHub Pages
 
@@ -38,9 +43,10 @@ set the source to "GitHub Actions". Your game will then be live at
 
 Plain HTML/CSS/JS with ES modules — no framework, no bundler, no backend.
 
-- `index.html` — the four screens (setup, reveal, discuss, results)
+- `index.html` — the five screens (setup, word list editor, reveal, discuss, results)
 - `js/state.js` — game state + phase transitions
 - `js/game-logic.js` — picks the word, hint tier, imposter, and discussion starter
+- `js/wordbank.js` — the live, editable word bank (starts from `data/categories.js`, persisted to localStorage)
 - `js/storage.js` — persists setup (names, categories, difficulty) to localStorage
-- `js/screens/*.js` — one module per screen
-- `data/categories.js` — the word bank
+- `js/screens/*.js` — one module per screen, including `editor.js` for the in-app word list editor
+- `data/categories.js` — the shipped default word bank
