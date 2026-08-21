@@ -65,6 +65,14 @@
         <button type="button" class="chip" data-category="general">General</button>
       </div>
 
+      <div class="editor-toolbar">
+        <input type="search" id="editor-search" class="name-input editor-search-input" placeholder="Search words and hints" autocomplete="off" />
+        <button type="button" id="editor-export" class="editor-action-btn">Export</button>
+        <button type="button" id="editor-import" class="editor-action-btn">Import</button>
+        <input type="file" id="editor-import-input" accept="application/json" hidden />
+      </div>
+      <p id="editor-io-message" class="editor-io-message" hidden></p>
+
       <div class="panel editor-add-panel">
         <h2 class="panel-title">Add Word</h2>
         <input type="text" id="editor-word-input" class="name-input editor-word-field" placeholder="Word" maxlength="40" autocomplete="off" />

@@ -516,6 +516,32 @@ body[data-active-phase="results"] #screen-results {
   font-weight: 800;
 }
 
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.editor-search-input {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.editor-toolbar .editor-action-btn {
+  flex-shrink: 0;
+}
+
+.editor-io-message {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.editor-io-message-error {
+  color: var(--text);
+}
+
 .editor-add-panel {
   margin-top: 16px;
 }

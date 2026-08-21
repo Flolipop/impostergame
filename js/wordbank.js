@@ -97,3 +97,47 @@ export function resetCategory(categoryId) {
   };
   persist();
 }
+
+export function exportWordBank() {
+  return { version: 1, categories: deepClone(categories) };
+}
+
+// Merges words from a previously exported word bank into the live one.
+// Only known category ids are touched; words already present in a category
+// (same word, case-insensitive) are skipped rather than duplicated.
+export function importWordBank(data) {
+  if (typeof data !== "object" || data === null || typeof data.categories !== "object" || data.categories === null) {
+    throw new Error("That file isn't a word list export.");
+  }
+
+  let added = 0;
+  let skipped = 0;
+
+  for (const id of Object.keys(categories)) {
+    const incoming = data.categories[id]?.words;
+    if (!Array.isArray(incoming)) continue;
+
+    const existingWords = new Set(categories[id].words.map((entry) => entry.word.toLowerCase()));
+
+    for (const entry of incoming) {
+      if (!isValidWordEntry(entry)) {
+        skipped++;
+        continue;
+      }
+      const key = entry.word.toLowerCase();
+      if (existingWords.has(key)) {
+        skipped++;
+        continue;
+      }
+      existingWords.add(key);
+      categories[id].words.push({
+        word: entry.word.trim(),
+        hints: { easy: entry.hints.easy.trim(), medium: entry.hints.medium.trim(), hard: entry.hints.hard.trim() },
+      });
+      added++;
+    }
+  }
+
+  if (added > 0) persist();
+  return { added, skipped };
+}

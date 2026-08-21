@@ -1,12 +1,27 @@
 import { Phase, setPhase } from "../state.js";
 import { getAllCategoryIds, getCategoryLabel } from "../game-logic.js";
-import { getWords, addWord, updateWord, deleteWord, resetCategory } from "../wordbank.js";
+import { getWords, addWord, updateWord, deleteWord, resetCategory, exportWordBank, importWordBank } from "../wordbank.js";
 import { $, $all } from "../utils.js";
 
 let selectedCategory = "anime";
 let editingIndex = null;
+let searchQuery = "";
 
-let backBtn, resetBtn, tabsEl, wordInput, hintEasyInput, hintMediumInput, hintHardInput, errorEl, addBtn, listEl;
+let backBtn,
+  resetBtn,
+  tabsEl,
+  wordInput,
+  hintEasyInput,
+  hintMediumInput,
+  hintHardInput,
+  errorEl,
+  addBtn,
+  listEl,
+  searchInput,
+  exportBtn,
+  importBtn,
+  importInput,
+  ioMessageEl;
 
 export function init() {
   backBtn = $("#editor-back");
@@ -19,6 +34,11 @@ export function init() {
   errorEl = $("#editor-error");
   addBtn = $("#editor-add-word");
   listEl = $("#editor-word-list");
+  searchInput = $("#editor-search");
+  exportBtn = $("#editor-export");
+  importBtn = $("#editor-import");
+  importInput = $("#editor-import-input");
+  ioMessageEl = $("#editor-io-message");
 
   selectedCategory = getAllCategoryIds()[0] ?? "anime";
 
@@ -42,13 +62,71 @@ export function init() {
 
   addBtn.addEventListener("click", handleAddWord);
 
+  searchInput.addEventListener("input", () => {
+    searchQuery = searchInput.value;
+    render();
+  });
+
+  exportBtn.addEventListener("click", handleExport);
+  importBtn.addEventListener("click", () => importInput.click());
+  importInput.addEventListener("change", handleImport);
+
   render();
 }
 
 export function onEnter() {
   editingIndex = null;
   hideError();
+  hideIoMessage();
   render();
+}
+
+function handleExport() {
+  const data = exportWordBank();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "imposter-word-lists.json";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  showIoMessage("Word lists exported.");
+}
+
+function handleImport() {
+  const file = importInput.files?.[0];
+  importInput.value = "";
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(String(reader.result));
+      const { added, skipped } = importWordBank(data);
+      showIoMessage(
+        added === 0
+          ? "No new words found — everything in that file is already here."
+          : `Imported ${added} word${added === 1 ? "" : "s"}${skipped > 0 ? ` (${skipped} skipped as duplicates or invalid)` : ""}.`
+      );
+      render();
+    } catch (err) {
+      showIoMessage(err instanceof Error ? err.message : "Couldn't import that file.", true);
+    }
+  };
+  reader.onerror = () => showIoMessage("Couldn't read that file.", true);
+  reader.readAsText(file);
+}
+
+function showIoMessage(message, isError = false) {
+  ioMessageEl.textContent = message;
+  ioMessageEl.classList.toggle("editor-io-message-error", isError);
+  ioMessageEl.hidden = false;
+}
+
+function hideIoMessage() {
+  ioMessageEl.hidden = true;
 }
 
 function isSingleWord(value) {
@@ -95,17 +173,29 @@ function render() {
   });
 
   listEl.innerHTML = "";
-  const words = getWords(selectedCategory);
+  const allWords = getWords(selectedCategory);
+  const query = searchQuery.trim().toLowerCase();
+  const entries = query
+    ? allWords
+        .map((entry, index) => ({ entry, index }))
+        .filter(
+          ({ entry }) =>
+            entry.word.toLowerCase().includes(query) ||
+            entry.hints.easy.toLowerCase().includes(query) ||
+            entry.hints.medium.toLowerCase().includes(query) ||
+            entry.hints.hard.toLowerCase().includes(query)
+        )
+    : allWords.map((entry, index) => ({ entry, index }));
 
-  if (words.length === 0) {
+  if (entries.length === 0) {
     const empty = document.createElement("li");
     empty.className = "player-list-empty";
-    empty.textContent = "No words in this category yet.";
+    empty.textContent = allWords.length === 0 ? "No words in this category yet." : "No words match your search.";
     listEl.appendChild(empty);
     return;
   }
 
-  words.forEach((entry, index) => {
+  entries.forEach(({ entry, index }) => {
     const li = document.createElement("li");
     li.className = "editor-word-row";
     li.appendChild(index === editingIndex ? buildEditForm(entry, index) : buildDisplayRow(entry, index));
