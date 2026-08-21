@@ -19,7 +19,10 @@
       </header>
 
       <div class="panel">
-        <h2 class="panel-title">Players <span id="player-count-label" class="panel-title-count"></span></h2>
+        <div class="panel-title-row">
+          <h2 class="panel-title">Players <span id="player-count-label" class="panel-title-count"></span></h2>
+          <button type="button" id="clear-all-names" class="clear-all-btn">Clear all</button>
+        </div>
         <div class="name-input-row">
           <input type="text" id="player-name-input" class="name-input" placeholder="Enter a name" maxlength="20" autocomplete="off" />
           <button type="button" id="player-add" class="btn btn-secondary name-add-btn">Add</button>
@@ -30,6 +33,15 @@
       <div class="panel">
         <h2 class="panel-title">Categories</h2>
         <div id="category-list" class="category-list"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Imposter Hint Difficulty</h2>
+        <div class="difficulty-choices" id="difficulty-choices">
+          <button type="button" class="chip" data-difficulty="easy">Easy</button>
+          <button type="button" class="chip active" data-difficulty="medium">Medium</button>
+          <button type="button" class="chip" data-difficulty="hard">Hard</button>
+        </div>
       </div>
 
       <p id="setup-error" class="error-text" hidden></p>

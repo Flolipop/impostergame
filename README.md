@@ -22,8 +22,10 @@ Then open `http://localhost:8000`.
 ## Adding words
 
 All game content lives in [`data/categories.js`](data/categories.js). Add or
-edit `{ word, hint }` entries under any category — the hint should be related
-to the word but never give it away directly. No other file needs to change.
+edit `{ word, hints: { easy, medium, hard } }` entries under any category —
+each hint is a single word related to the answer but never the answer
+itself, at three difficulty tiers (easy is more revealing, hard is vaguer).
+No other file needs to change.
 
 ## Deploying to GitHub Pages
 
@@ -36,8 +38,9 @@ set the source to "GitHub Actions". Your game will then be live at
 
 Plain HTML/CSS/JS with ES modules — no framework, no bundler, no backend.
 
-- `index.html` — the three screens (setup, reveal, results)
+- `index.html` — the four screens (setup, reveal, discuss, results)
 - `js/state.js` — game state + phase transitions
-- `js/game-logic.js` — picks the word and the imposter
+- `js/game-logic.js` — picks the word, hint tier, imposter, and discussion starter
+- `js/storage.js` — persists setup (names, categories, difficulty) to localStorage
 - `js/screens/*.js` — one module per screen
 - `data/categories.js` — the word bank

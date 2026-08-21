@@ -1,18 +1,28 @@
 import { state, setPhase, Phase } from "../state.js";
 import { createRound, getAllCategoryIds, getCategoryLabel } from "../game-logic.js";
+import { loadSetup, saveSetup } from "../storage.js";
 import { $, $all } from "../utils.js";
 
 const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 10;
 
-let nameInputEl, addBtn, playerListEl, playerCountLabelEl, categoryListEl, errorEl, startBtn;
+let nameInputEl, addBtn, clearAllBtn, playerListEl, playerCountLabelEl, categoryListEl, difficultyListEl, errorEl, startBtn;
 
 export function init() {
+  const saved = loadSetup();
+  if (saved) {
+    state.playerNames = saved.playerNames;
+    state.selectedCategories = saved.selectedCategories;
+    state.difficulty = saved.difficulty;
+  }
+
   nameInputEl = $("#player-name-input");
   addBtn = $("#player-add");
+  clearAllBtn = $("#clear-all-names");
   playerListEl = $("#player-list");
   playerCountLabelEl = $("#player-count-label");
   categoryListEl = $("#category-list");
+  difficultyListEl = $("#difficulty-choices");
   errorEl = $("#setup-error");
   startBtn = $("#start-game");
 
@@ -24,7 +34,17 @@ export function init() {
     }
   });
 
+  clearAllBtn.addEventListener("click", clearAllNames);
+
   renderCategoryList();
+
+  $all(".chip", difficultyListEl).forEach((chip) => {
+    chip.addEventListener("click", () => {
+      state.difficulty = chip.dataset.difficulty;
+      persist();
+      render();
+    });
+  });
 
   startBtn.addEventListener("click", startGame);
 
@@ -33,6 +53,14 @@ export function init() {
 
 export function onEnter() {
   render();
+}
+
+function persist() {
+  saveSetup({
+    playerNames: state.playerNames,
+    selectedCategories: state.selectedCategories,
+    difficulty: state.difficulty,
+  });
 }
 
 function addNameFromInput() {
@@ -47,12 +75,21 @@ function addNameFromInput() {
   hideError();
   state.playerNames.push(name);
   nameInputEl.value = "";
+  persist();
   render();
   nameInputEl.focus();
 }
 
 function removePlayerName(index) {
   state.playerNames.splice(index, 1);
+  persist();
+  render();
+}
+
+function clearAllNames() {
+  if (state.playerNames.length === 0) return;
+  state.playerNames = [];
+  persist();
   render();
 }
 
@@ -76,6 +113,7 @@ function toggleCategory(id) {
   } else {
     state.selectedCategories.push(id);
   }
+  persist();
   render();
 }
 
@@ -89,7 +127,7 @@ function startGame() {
     return;
   }
   hideError();
-  state.round = createRound(state.playerNames, state.selectedCategories);
+  state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty);
   state.revealIndex = 0;
   setPhase(Phase.REVEAL);
 }
@@ -139,8 +177,13 @@ function render() {
   renderPlayerList();
   playerCountLabelEl.textContent = `(${state.playerNames.length}/${MAX_PLAYERS})`;
   addBtn.disabled = state.playerNames.length >= MAX_PLAYERS;
+  clearAllBtn.disabled = state.playerNames.length === 0;
 
   $all(".category-toggle", categoryListEl).forEach((btn) => {
     btn.classList.toggle("active", state.selectedCategories.includes(btn.dataset.category));
+  });
+
+  $all(".chip", difficultyListEl).forEach((chip) => {
+    chip.classList.toggle("active", chip.dataset.difficulty === state.difficulty);
   });
 }

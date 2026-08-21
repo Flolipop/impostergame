@@ -13,7 +13,7 @@ export function init() {
   newSetupBtn = $("#new-setup");
 
   playAgainBtn.addEventListener("click", () => {
-    state.round = createRound(state.playerNames, state.selectedCategories);
+    state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty);
     state.revealIndex = 0;
     setPhase(Phase.REVEAL);
   });

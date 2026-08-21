@@ -9,6 +9,7 @@ export const state = {
   phase: Phase.SETUP,
   playerNames: [],
   selectedCategories: ["anime", "movies", "videoGames", "general"],
+  difficulty: "medium",
   round: null,
   revealIndex: 0,
 };

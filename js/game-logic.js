@@ -10,8 +10,9 @@ export function getCategoryLabel(id) {
 }
 
 // Builds a fresh round: picks a random word from a random selected category,
-// a random imposter, and a random player to start the discussion.
-export function createRound(playerNames, selectedCategoryIds) {
+// a random imposter, and a random player to start the discussion. difficulty
+// picks which hint tier ("easy" | "medium" | "hard") the imposter sees.
+export function createRound(playerNames, selectedCategoryIds, difficulty = "medium") {
   const pool = selectedCategoryIds.flatMap((id) => {
     const category = CATEGORIES[id];
     if (!category) return [];
@@ -30,7 +31,7 @@ export function createRound(playerNames, selectedCategoryIds) {
   return {
     category: pick.category,
     word: pick.word,
-    hint: pick.hint,
+    hint: pick.hints[difficulty] ?? pick.hints.medium,
     imposterIndex,
     starterIndex,
   };
