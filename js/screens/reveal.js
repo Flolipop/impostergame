@@ -42,10 +42,11 @@ function revealCurrentPlayer() {
 
   if (isImposter) {
     roleEl.textContent = "You are the Imposter!";
-    categoryEl.textContent = getCategoryLabel(round.category);
+    categoryEl.hidden = true;
     wordEl.textContent = `Hint: ${round.hint}`;
   } else {
     roleEl.textContent = "The secret word is:";
+    categoryEl.hidden = false;
     categoryEl.textContent = getCategoryLabel(round.category);
     wordEl.textContent = round.word;
   }
