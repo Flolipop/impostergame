@@ -11,18 +11,19 @@ function deepClone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function isValidHintPool(pool) {
+  return Array.isArray(pool) && pool.length > 0 && pool.every((hint) => typeof hint === "string" && hint.trim().length > 0);
+}
+
 function isValidWordEntry(entry) {
   return (
     entry &&
     typeof entry.word === "string" &&
     entry.word.trim().length > 0 &&
     entry.hints &&
-    typeof entry.hints.easy === "string" &&
-    typeof entry.hints.medium === "string" &&
-    typeof entry.hints.hard === "string" &&
-    entry.hints.easy.trim().length > 0 &&
-    entry.hints.medium.trim().length > 0 &&
-    entry.hints.hard.trim().length > 0
+    isValidHintPool(entry.hints.easy) &&
+    isValidHintPool(entry.hints.medium) &&
+    isValidHintPool(entry.hints.hard)
   );
 }
 
@@ -132,7 +133,11 @@ export function importWordBank(data) {
       existingWords.add(key);
       categories[id].words.push({
         word: entry.word.trim(),
-        hints: { easy: entry.hints.easy.trim(), medium: entry.hints.medium.trim(), hard: entry.hints.hard.trim() },
+        hints: {
+          easy: entry.hints.easy.map((hint) => hint.trim()),
+          medium: entry.hints.medium.map((hint) => hint.trim()),
+          hard: entry.hints.hard.map((hint) => hint.trim()),
+        },
       });
       added++;
     }

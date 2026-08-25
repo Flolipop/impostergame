@@ -130,22 +130,32 @@ function hideIoMessage() {
 }
 
 function isSingleWord(value) {
-  const trimmed = value.trim();
-  return trimmed.length > 0 && !/\s/.test(trimmed);
+  return value.length > 0 && !/\s/.test(value);
+}
+
+// Parses a comma-separated field into a hint pool: trims each part, drops
+// empties, and requires every remaining part to be a single word.
+function parseHintPool(value) {
+  const parts = value
+    .split(",")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
+  if (parts.length === 0 || !parts.every(isSingleWord)) return null;
+  return parts;
 }
 
 function handleAddWord() {
   const word = wordInput.value.trim();
-  const easy = hintEasyInput.value.trim();
-  const medium = hintMediumInput.value.trim();
-  const hard = hintHardInput.value.trim();
+  const easy = parseHintPool(hintEasyInput.value);
+  const medium = parseHintPool(hintMediumInput.value);
+  const hard = parseHintPool(hintHardInput.value);
 
   if (!word) {
     showError("Enter a word.");
     return;
   }
-  if (!isSingleWord(easy) || !isSingleWord(medium) || !isSingleWord(hard)) {
-    showError("Enter all three hints — one word each, no spaces.");
+  if (!easy || !medium || !hard) {
+    showError("Enter at least one hint per tier, comma-separated — each hint must be a single word, no spaces.");
     return;
   }
 
@@ -181,9 +191,9 @@ function render() {
         .filter(
           ({ entry }) =>
             entry.word.toLowerCase().includes(query) ||
-            entry.hints.easy.toLowerCase().includes(query) ||
-            entry.hints.medium.toLowerCase().includes(query) ||
-            entry.hints.hard.toLowerCase().includes(query)
+            entry.hints.easy.some((hint) => hint.toLowerCase().includes(query)) ||
+            entry.hints.medium.some((hint) => hint.toLowerCase().includes(query)) ||
+            entry.hints.hard.some((hint) => hint.toLowerCase().includes(query))
         )
     : allWords.map((entry, index) => ({ entry, index }));
 
@@ -216,7 +226,7 @@ function buildDisplayRow(entry, index) {
 
   const hints = document.createElement("span");
   hints.className = "editor-word-hints";
-  hints.textContent = `${entry.hints.easy} · ${entry.hints.medium} · ${entry.hints.hard}`;
+  hints.textContent = `${entry.hints.easy.join(", ")} · ${entry.hints.medium.join(", ")} · ${entry.hints.hard.join(", ")}`;
 
   info.append(title, hints);
 
@@ -253,9 +263,9 @@ function buildEditForm(entry, index) {
   form.className = "editor-word-row-edit";
 
   const wordField = makeField(entry.word, "Word", 40);
-  const easyField = makeField(entry.hints.easy, "Easy hint", 20);
-  const mediumField = makeField(entry.hints.medium, "Medium hint", 20);
-  const hardField = makeField(entry.hints.hard, "Hard hint", 20);
+  const easyField = makeField(entry.hints.easy.join(", "), "Easy hints, comma-separated", 120);
+  const mediumField = makeField(entry.hints.medium.join(", "), "Medium hints, comma-separated", 120);
+  const hardField = makeField(entry.hints.hard.join(", "), "Hard hints, comma-separated", 120);
 
   const rowError = document.createElement("p");
   rowError.className = "error-text editor-row-error";
@@ -270,12 +280,12 @@ function buildEditForm(entry, index) {
   saveBtn.textContent = "Save";
   saveBtn.addEventListener("click", () => {
     const word = wordField.value.trim();
-    const easy = easyField.value.trim();
-    const medium = mediumField.value.trim();
-    const hard = hardField.value.trim();
+    const easy = parseHintPool(easyField.value);
+    const medium = parseHintPool(mediumField.value);
+    const hard = parseHintPool(hardField.value);
 
-    if (!word || !isSingleWord(easy) || !isSingleWord(medium) || !isSingleWord(hard)) {
-      rowError.textContent = "Word required; hints must be one word each.";
+    if (!word || !easy || !medium || !hard) {
+      rowError.textContent = "Word required; each hint tier needs at least one single-word hint, comma-separated.";
       rowError.hidden = false;
       return;
     }

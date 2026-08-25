@@ -28,11 +28,12 @@ export function createRound(playerNames, selectedCategoryIds, difficulty = "medi
   const pick = shuffled[randomInt(shuffled.length)];
   const imposterIndex = randomInt(playerNames.length);
   const starterIndex = randomInt(playerNames.length);
+  const hintPool = pick.hints[difficulty] ?? pick.hints.medium;
 
   return {
     category: pick.category,
     word: pick.word,
-    hint: pick.hints[difficulty] ?? pick.hints.medium,
+    hint: hintPool[randomInt(hintPool.length)],
     imposterIndex,
     starterIndex,
   };
