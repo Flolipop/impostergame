@@ -10,9 +10,9 @@ export function getCategoryLabel(id) {
 }
 
 // Builds a fresh round: picks a random word from a random selected category,
-// `imposterCount` random imposters (0 = no imposter, up to every player), and
-// a random player to start the discussion. difficulty picks which hint tier
-// ("easy" | "medium" | "hard") imposters see.
+// `imposterCount` random imposters (0 = no imposter, up to every player) each
+// with their own hint, and a random player to start the discussion.
+// difficulty picks which hint tier ("easy" | "medium" | "hard") imposters see.
 export function createRound(playerNames, selectedCategoryIds, difficulty = "medium", imposterCount = 1) {
   const categories = getCategories();
   const pool = selectedCategoryIds.flatMap((id) => {
@@ -31,12 +31,16 @@ export function createRound(playerNames, selectedCategoryIds, difficulty = "medi
   const imposterIndices = shuffle(playerNames.map((_, i) => i)).slice(0, clampedImposterCount);
   const starterIndex = randomInt(playerNames.length);
   const hintPool = pick.hints[difficulty] ?? pick.hints.medium;
+  const shuffledHints = shuffle(hintPool);
+  // Cycle through the shuffled pool so imposters get distinct hints where
+  // possible, wrapping around if there are more imposters than pool hints.
+  const imposterHints = imposterIndices.map((_, i) => shuffledHints[i % shuffledHints.length]);
 
   return {
     category: pick.category,
     word: pick.word,
-    hint: hintPool[randomInt(hintPool.length)],
     imposterIndices,
+    imposterHints,
     starterIndex,
   };
 }

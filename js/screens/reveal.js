@@ -38,12 +38,13 @@ function updateLabels() {
 
 function revealCurrentPlayer() {
   const { round, revealIndex } = state;
-  const isImposter = round.imposterIndices.includes(revealIndex);
+  const imposterPos = round.imposterIndices.indexOf(revealIndex);
+  const isImposter = imposterPos !== -1;
 
   if (isImposter) {
     roleEl.textContent = "You are the Imposter!";
     categoryEl.hidden = true;
-    wordEl.textContent = `Hint: ${round.hint}`;
+    wordEl.textContent = `Hint: ${round.imposterHints[imposterPos]}`;
   } else {
     roleEl.textContent = "The secret word is:";
     categoryEl.hidden = false;

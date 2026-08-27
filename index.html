@@ -13,6 +13,10 @@
 
     <!-- SETUP -->
     <section id="screen-setup" class="screen">
+      <nav class="tab-bar">
+        <button type="button" class="tab-btn" data-tab="setup">Setup</button>
+        <button type="button" class="tab-btn" data-tab="editor">Word List</button>
+      </nav>
       <header class="app-header">
         <h1 class="logo">Imposter</h1>
         <p class="tagline">One phone. One imposter. Zero mercy.</p>
@@ -59,13 +63,15 @@
       <p id="setup-error" class="error-text" hidden></p>
 
       <button type="button" id="start-game" class="btn btn-primary btn-big">Start Game</button>
-      <button type="button" id="open-editor" class="btn btn-secondary btn-big">Edit Word Lists</button>
     </section>
 
     <!-- EDITOR -->
     <section id="screen-editor" class="screen">
+      <nav class="tab-bar">
+        <button type="button" class="tab-btn" data-tab="setup">Setup</button>
+        <button type="button" class="tab-btn" data-tab="editor">Word List</button>
+      </nav>
       <div class="editor-header">
-        <button type="button" id="editor-back" class="icon-btn" aria-label="Back to setup">←</button>
         <h1 class="editor-title">Word Lists</h1>
         <button type="button" id="editor-reset" class="clear-all-btn">Reset</button>
       </div>
@@ -143,7 +149,7 @@
         <div class="results-word-card">
           <p class="results-category" id="results-category">Movies</p>
           <p class="results-word" id="results-word">Titanic</p>
-          <p class="results-hint-label">Imposter's hint was:</p>
+          <p class="results-hint-label" id="results-hint-label">Imposter's hint was:</p>
           <p class="results-hint" id="results-hint"></p>
         </div>
 

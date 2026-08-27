@@ -19,11 +19,11 @@ export const state = {
 const listeners = {};
 
 export function onEnterPhase(phase, handler) {
-  listeners[phase] = handler;
+  (listeners[phase] ??= []).push(handler);
 }
 
 export function setPhase(next) {
   state.phase = next;
   document.body.dataset.activePhase = next;
-  listeners[next]?.();
+  listeners[next]?.forEach((handler) => handler());
 }

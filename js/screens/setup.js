@@ -6,7 +6,7 @@ import { $, $all } from "../utils.js";
 const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 10;
 
-let nameInputEl, addBtn, clearAllBtn, playerListEl, playerCountLabelEl, categoryListEl, difficultyListEl, errorEl, startBtn, editorBtn;
+let nameInputEl, addBtn, clearAllBtn, playerListEl, playerCountLabelEl, categoryListEl, difficultyListEl, errorEl, startBtn;
 let imposterMaxEl, imposterValueEl, imposterDecBtn, imposterIncBtn;
 
 export function init() {
@@ -27,7 +27,6 @@ export function init() {
   difficultyListEl = $("#difficulty-choices");
   errorEl = $("#setup-error");
   startBtn = $("#start-game");
-  editorBtn = $("#open-editor");
   imposterMaxEl = $("#imposter-count-max");
   imposterValueEl = $("#imposter-count-value");
   imposterDecBtn = $("#imposter-count-decrease");
@@ -68,7 +67,6 @@ export function init() {
   });
 
   startBtn.addEventListener("click", startGame);
-  editorBtn.addEventListener("click", () => setPhase(Phase.EDITOR));
 
   render();
 }

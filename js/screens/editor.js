@@ -1,4 +1,3 @@
-import { Phase, setPhase } from "../state.js";
 import { getAllCategoryIds, getCategoryLabel } from "../game-logic.js";
 import { getWords, addWord, updateWord, deleteWord, resetCategory, exportWordBank, importWordBank } from "../wordbank.js";
 import { $, $all } from "../utils.js";
@@ -7,8 +6,7 @@ let selectedCategory = "anime";
 let editingIndex = null;
 let searchQuery = "";
 
-let backBtn,
-  resetBtn,
+let resetBtn,
   tabsEl,
   wordInput,
   hintEasyInput,
@@ -24,7 +22,6 @@ let backBtn,
   ioMessageEl;
 
 export function init() {
-  backBtn = $("#editor-back");
   resetBtn = $("#editor-reset");
   tabsEl = $("#editor-category-tabs");
   wordInput = $("#editor-word-input");
@@ -41,8 +38,6 @@ export function init() {
   ioMessageEl = $("#editor-io-message");
 
   selectedCategory = getAllCategoryIds()[0] ?? "anime";
-
-  backBtn.addEventListener("click", () => setPhase(Phase.SETUP));
 
   resetBtn.addEventListener("click", () => {
     resetCategory(selectedCategory);
