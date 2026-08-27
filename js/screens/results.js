@@ -1,5 +1,5 @@
 import { state, setPhase, Phase } from "../state.js";
-import { createRound, getCategoryLabel } from "../game-logic.js";
+import { createRound, resolveImposterCount, getCategoryLabel } from "../game-logic.js";
 import { $ } from "../utils.js";
 
 let titleEl, imposterEl, categoryEl, wordEl, hintLabelEl, hintEl, playAgainBtn, newSetupBtn;
@@ -15,7 +15,8 @@ export function init() {
   newSetupBtn = $("#new-setup");
 
   playAgainBtn.addEventListener("click", () => {
-    state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty, state.imposterCount);
+    const imposterCount = resolveImposterCount(state.playerNames.length, state.imposterCount, state.randomImposterCount);
+    state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty, imposterCount);
     state.revealIndex = 0;
     setPhase(Phase.REVEAL);
   });

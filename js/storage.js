@@ -16,15 +16,19 @@ export function loadSetup() {
         : [],
       difficulty: typeof data.difficulty === "string" ? data.difficulty : "medium",
       imposterCount: Number.isInteger(data.imposterCount) ? data.imposterCount : 1,
+      randomImposterCount: typeof data.randomImposterCount === "boolean" ? data.randomImposterCount : false,
     };
   } catch {
     return null;
   }
 }
 
-export function saveSetup({ playerNames, selectedCategories, difficulty, imposterCount }) {
+export function saveSetup({ playerNames, selectedCategories, difficulty, imposterCount, randomImposterCount }) {
   try {
-    localStorage.setItem(KEY, JSON.stringify({ playerNames, selectedCategories, difficulty, imposterCount }));
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({ playerNames, selectedCategories, difficulty, imposterCount, randomImposterCount })
+    );
   } catch {
     // localStorage unavailable (private mode, disabled, quota) — ignore.
   }

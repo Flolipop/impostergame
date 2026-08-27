@@ -1,5 +1,5 @@
 import { state, setPhase, Phase } from "../state.js";
-import { createRound, getAllCategoryIds, getCategoryLabel } from "../game-logic.js";
+import { createRound, resolveImposterCount, getAllCategoryIds, getCategoryLabel } from "../game-logic.js";
 import { loadSetup, saveSetup } from "../storage.js";
 import { $, $all } from "../utils.js";
 
@@ -7,7 +7,7 @@ const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 10;
 
 let nameInputEl, addBtn, clearAllBtn, playerListEl, playerCountLabelEl, categoryListEl, difficultyListEl, errorEl, startBtn;
-let imposterMaxEl, imposterValueEl, imposterDecBtn, imposterIncBtn;
+let imposterMaxEl, imposterValueEl, imposterDecBtn, imposterIncBtn, imposterRandomToggle;
 
 export function init() {
   const saved = loadSetup();
@@ -16,6 +16,7 @@ export function init() {
     state.selectedCategories = saved.selectedCategories;
     state.difficulty = saved.difficulty;
     state.imposterCount = saved.imposterCount;
+    state.randomImposterCount = saved.randomImposterCount;
   }
 
   nameInputEl = $("#player-name-input");
@@ -31,6 +32,7 @@ export function init() {
   imposterValueEl = $("#imposter-count-value");
   imposterDecBtn = $("#imposter-count-decrease");
   imposterIncBtn = $("#imposter-count-increase");
+  imposterRandomToggle = $("#imposter-random-toggle");
 
   clampImposterCount();
 
@@ -52,6 +54,12 @@ export function init() {
 
   imposterIncBtn.addEventListener("click", () => {
     state.imposterCount = Math.min(state.playerNames.length, state.imposterCount + 1);
+    persist();
+    render();
+  });
+
+  imposterRandomToggle.addEventListener("click", () => {
+    state.randomImposterCount = !state.randomImposterCount;
     persist();
     render();
   });
@@ -83,6 +91,7 @@ function persist() {
     selectedCategories: state.selectedCategories,
     difficulty: state.difficulty,
     imposterCount: state.imposterCount,
+    randomImposterCount: state.randomImposterCount,
   });
 }
 
@@ -158,7 +167,8 @@ function startGame() {
     return;
   }
   hideError();
-  state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty, state.imposterCount);
+  const imposterCount = resolveImposterCount(state.playerNames.length, state.imposterCount, state.randomImposterCount);
+  state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty, imposterCount);
   state.revealIndex = 0;
   setPhase(Phase.REVEAL);
 }
@@ -219,7 +229,8 @@ function render() {
   });
 
   imposterMaxEl.textContent = `(0-${state.playerNames.length})`;
-  imposterValueEl.textContent = state.imposterCount;
-  imposterDecBtn.disabled = state.imposterCount <= 0;
-  imposterIncBtn.disabled = state.imposterCount >= state.playerNames.length;
+  imposterValueEl.textContent = state.randomImposterCount ? "?" : state.imposterCount;
+  imposterDecBtn.disabled = state.randomImposterCount || state.imposterCount <= 0;
+  imposterIncBtn.disabled = state.randomImposterCount || state.imposterCount >= state.playerNames.length;
+  imposterRandomToggle.setAttribute("aria-checked", String(state.randomImposterCount));
 }

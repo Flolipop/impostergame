@@ -9,6 +9,12 @@ export function getCategoryLabel(id) {
   return getWordbankCategoryLabel(id);
 }
 
+// When randomizeCount is on, picks a fresh imposter count (0 to every
+// player, inclusive) instead of using the fixed setup value.
+export function resolveImposterCount(playerCount, imposterCount, randomizeCount) {
+  return randomizeCount ? randomInt(playerCount + 1) : imposterCount;
+}
+
 // Builds a fresh round: picks a random word from a random selected category,
 // `imposterCount` random imposters (0 = no imposter, up to every player) each
 // with their own hint, and a random player to start the discussion.

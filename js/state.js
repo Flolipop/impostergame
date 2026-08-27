@@ -12,6 +12,7 @@ export const state = {
   selectedCategories: ["anime", "movies", "videoGames", "general"],
   difficulty: "medium",
   imposterCount: 1,
+  randomImposterCount: false,
   round: null,
   revealIndex: 0,
 };
