@@ -36,6 +36,18 @@
       </div>
 
       <div class="panel">
+        <div class="panel-title-row">
+          <h2 class="panel-title">Imposters</h2>
+          <span id="imposter-count-max" class="panel-title-count"></span>
+        </div>
+        <div class="stepper" id="imposter-count-stepper">
+          <button type="button" id="imposter-count-decrease" class="stepper-btn" aria-label="Fewer imposters">−</button>
+          <span class="stepper-value" id="imposter-count-value">1</span>
+          <button type="button" id="imposter-count-increase" class="stepper-btn" aria-label="More imposters">+</button>
+        </div>
+      </div>
+
+      <div class="panel">
         <h2 class="panel-title">Imposter Hint Difficulty</h2>
         <div class="difficulty-choices" id="difficulty-choices">
           <button type="button" class="chip" data-difficulty="easy">Easy</button>
@@ -125,7 +137,7 @@
     <!-- RESULTS -->
     <section id="screen-results" class="screen">
       <div class="results-wrap">
-        <h2 class="results-title">The Imposter was...</h2>
+        <h2 class="results-title" id="results-title">The Imposter was...</h2>
         <p class="results-imposter" id="results-imposter">Player 3</p>
 
         <div class="results-word-card">

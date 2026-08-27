@@ -11,6 +11,7 @@ export const state = {
   playerNames: [],
   selectedCategories: ["anime", "movies", "videoGames", "general"],
   difficulty: "medium",
+  imposterCount: 1,
   round: null,
   revealIndex: 0,
 };

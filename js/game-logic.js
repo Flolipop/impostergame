@@ -10,9 +10,10 @@ export function getCategoryLabel(id) {
 }
 
 // Builds a fresh round: picks a random word from a random selected category,
-// a random imposter, and a random player to start the discussion. difficulty
-// picks which hint tier ("easy" | "medium" | "hard") the imposter sees.
-export function createRound(playerNames, selectedCategoryIds, difficulty = "medium") {
+// `imposterCount` random imposters (0 = no imposter, up to every player), and
+// a random player to start the discussion. difficulty picks which hint tier
+// ("easy" | "medium" | "hard") imposters see.
+export function createRound(playerNames, selectedCategoryIds, difficulty = "medium", imposterCount = 1) {
   const categories = getCategories();
   const pool = selectedCategoryIds.flatMap((id) => {
     const category = categories[id];
@@ -26,7 +27,8 @@ export function createRound(playerNames, selectedCategoryIds, difficulty = "medi
 
   const shuffled = shuffle(pool);
   const pick = shuffled[randomInt(shuffled.length)];
-  const imposterIndex = randomInt(playerNames.length);
+  const clampedImposterCount = Math.max(0, Math.min(imposterCount, playerNames.length));
+  const imposterIndices = shuffle(playerNames.map((_, i) => i)).slice(0, clampedImposterCount);
   const starterIndex = randomInt(playerNames.length);
   const hintPool = pick.hints[difficulty] ?? pick.hints.medium;
 
@@ -34,7 +36,7 @@ export function createRound(playerNames, selectedCategoryIds, difficulty = "medi
     category: pick.category,
     word: pick.word,
     hint: hintPool[randomInt(hintPool.length)],
-    imposterIndex,
+    imposterIndices,
     starterIndex,
   };
 }

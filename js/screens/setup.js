@@ -7,6 +7,7 @@ const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 10;
 
 let nameInputEl, addBtn, clearAllBtn, playerListEl, playerCountLabelEl, categoryListEl, difficultyListEl, errorEl, startBtn, editorBtn;
+let imposterMaxEl, imposterValueEl, imposterDecBtn, imposterIncBtn;
 
 export function init() {
   const saved = loadSetup();
@@ -14,6 +15,7 @@ export function init() {
     state.playerNames = saved.playerNames;
     state.selectedCategories = saved.selectedCategories;
     state.difficulty = saved.difficulty;
+    state.imposterCount = saved.imposterCount;
   }
 
   nameInputEl = $("#player-name-input");
@@ -26,6 +28,12 @@ export function init() {
   errorEl = $("#setup-error");
   startBtn = $("#start-game");
   editorBtn = $("#open-editor");
+  imposterMaxEl = $("#imposter-count-max");
+  imposterValueEl = $("#imposter-count-value");
+  imposterDecBtn = $("#imposter-count-decrease");
+  imposterIncBtn = $("#imposter-count-increase");
+
+  clampImposterCount();
 
   addBtn.addEventListener("click", addNameFromInput);
   nameInputEl.addEventListener("keydown", (e) => {
@@ -36,6 +44,18 @@ export function init() {
   });
 
   clearAllBtn.addEventListener("click", clearAllNames);
+
+  imposterDecBtn.addEventListener("click", () => {
+    state.imposterCount = Math.max(0, state.imposterCount - 1);
+    persist();
+    render();
+  });
+
+  imposterIncBtn.addEventListener("click", () => {
+    state.imposterCount = Math.min(state.playerNames.length, state.imposterCount + 1);
+    persist();
+    render();
+  });
 
   renderCategoryList();
 
@@ -54,6 +74,8 @@ export function init() {
 }
 
 export function onEnter() {
+  clampImposterCount();
+  persist();
   render();
 }
 
@@ -62,7 +84,13 @@ function persist() {
     playerNames: state.playerNames,
     selectedCategories: state.selectedCategories,
     difficulty: state.difficulty,
+    imposterCount: state.imposterCount,
   });
+}
+
+function clampImposterCount() {
+  if (state.playerNames.length === 0) return;
+  state.imposterCount = Math.max(0, Math.min(state.imposterCount, state.playerNames.length));
 }
 
 function addNameFromInput() {
@@ -77,6 +105,7 @@ function addNameFromInput() {
   hideError();
   state.playerNames.push(name);
   nameInputEl.value = "";
+  clampImposterCount();
   persist();
   render();
   nameInputEl.focus();
@@ -84,6 +113,7 @@ function addNameFromInput() {
 
 function removePlayerName(index) {
   state.playerNames.splice(index, 1);
+  clampImposterCount();
   persist();
   render();
 }
@@ -91,6 +121,7 @@ function removePlayerName(index) {
 function clearAllNames() {
   if (state.playerNames.length === 0) return;
   state.playerNames = [];
+  clampImposterCount();
   persist();
   render();
 }
@@ -129,7 +160,7 @@ function startGame() {
     return;
   }
   hideError();
-  state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty);
+  state.round = createRound(state.playerNames, state.selectedCategories, state.difficulty, state.imposterCount);
   state.revealIndex = 0;
   setPhase(Phase.REVEAL);
 }
@@ -188,4 +219,9 @@ function render() {
   $all(".chip", difficultyListEl).forEach((chip) => {
     chip.classList.toggle("active", chip.dataset.difficulty === state.difficulty);
   });
+
+  imposterMaxEl.textContent = `(0-${state.playerNames.length})`;
+  imposterValueEl.textContent = state.imposterCount;
+  imposterDecBtn.disabled = state.imposterCount <= 0;
+  imposterIncBtn.disabled = state.imposterCount >= state.playerNames.length;
 }

@@ -254,6 +254,48 @@ body[data-active-phase="results"] #screen-results {
   padding: 8px 0;
 }
 
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.stepper-btn {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-touch-callout: none;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+
+.stepper-btn:active {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.stepper-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: transparent;
+  color: var(--text);
+}
+
+.stepper-value {
+  min-width: 2.5ch;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
 .category-list {
   display: grid;
   grid-template-columns: 1fr 1fr;

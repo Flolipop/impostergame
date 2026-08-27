@@ -38,7 +38,7 @@ function updateLabels() {
 
 function revealCurrentPlayer() {
   const { round, revealIndex } = state;
-  const isImposter = revealIndex === round.imposterIndex;
+  const isImposter = round.imposterIndices.includes(revealIndex);
 
   if (isImposter) {
     roleEl.textContent = "You are the Imposter!";
